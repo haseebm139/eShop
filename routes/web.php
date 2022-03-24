@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AdminFrontendController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,40 +17,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/home', function () {
+    return view('home');
 });
 
-Route::get('category',[Frontend\FrontendController::class,'category']);
+Route::get('/category',[FrontendController::class,'category']);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/landing', [FrontendController::class, 'index'])->name('landing');
-
-//  Route::group(['middleware' => ['auth','isAdmin']], function () {
-
-//    Route::get('/dashboard', function () {
-//       return view('admin.index');
-//    });
-
-// });
+// Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [FrontendController::class, 'index'])->name('landing');
 
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
-     Route::get('/dashboard',[FrontendController::class ,'index']);
+
+    // Route::get('/dashboard','Admin\AdminFrontendController@index');
+    Route::get('dashboard', [AdminFrontendController::class,'index']);
+
 
     //  Categories
-     Route::get('categories', [CategoryController::class,'index'])->name('categories');
-     Route::get('add-categories', [CategoryController::class,'add'])->name('add.categories');
-     Route::post('insert-categories', [CategoryController::class,'insert'])->name('insert.categories');
-     Route::get('edit-categories/{id}', [CategoryController::class,'editProduct'])->name('edit.categories');
-     Route::post('update-categories', [CategoryController::class,'updateProduct'])->name('update.categories');
-     Route::get('delete-categories/{id}', [CategoryController::class,'destory'])->name('delete.categories');
+     Route::get('categories/list', [CategoryController::class,'index']);
+     Route::get('add-categories', [CategoryController::class,'add']);
+     Route::post('insert-categories', [CategoryController::class,'insert']);
+     Route::get('edit-categories/{id}', [CategoryController::class,'editProduct']);
+     Route::post('update-categories', [CategoryController::class,'updateProduct']);
+     Route::get('delete-categories/{id}', [CategoryController::class,'destory']);
 
 
     //  Products
-     Route::get('products', [ProductController::class,'index'])->name('products');
+     Route::get('products/list', [ProductController::class,'index'])->name('products');
      Route::get('add-products', [ProductController::class,'add'])->name('add.products');
      Route::post('insert-products', [ProductController::class,'insert'])->name('insert.products');
      Route::get('edit-product/{id}', [ProductController::class,'editProduct'])->name('edit.product');
