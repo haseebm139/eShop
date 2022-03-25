@@ -92,7 +92,7 @@ class ProductController extends Controller
         $product->meta_keyword = $request->input('meta_keyword');
         $product->meta_descrip = $request->input('meta_descrip');
         $product->update();
-        return redirect('/products')->with('status','Product Update Successfully');
+        return redirect('/products/list')->with('status','Product Update Successfully');
 
     }
 
